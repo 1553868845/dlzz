@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingli.mall.mapper.ProductMapper">
+
+    <resultMap id="ProductRM" type="com.qingli.mall.entity.Product">
+        <id     column="id"               property="id"/>
+        <result column="category_id"      property="categoryId"/>
+        <result column="name"             property="name"/>
+        <result column="slug"             property="slug"/>
+        <result column="subtitle"         property="subtitle"/>
+        <result column="description"      property="description"/>
+        <result column="short_desc"       property="shortDesc"/>
+        <result column="purity"           property="purity"/>
+        <result column="form_type"        property="form"/>
+        <result column="storage"          property="storage"/>
+        <result column="specification"    property="specification"/>
+        <result column="price"            property="price"/>
+        <result column="stock_status"     property="stockStatus"/>
+        <result column="is_featured"      property="isFeatured"/>
+        <result column="image"            property="coverImage"/>
+        <result column="sort_order"       property="sortOrder"/>
+        <result column="created_at"       property="createdAt"/>
+        <result column="updated_at"       property="updatedAt"/>
+        <result column="category_name"    property="categoryName"/>
+        <!-- 中文字段 -->
+        <result column="name_zh"          property="nameZh"/>
+        <result column="subtitle_zh"      property="subtitleZh"/>
+        <result column="short_desc_zh"    property="shortDescZh"/>
+        <result column="description_zh"   property="descriptionZh"/>
+        <result column="purity_zh"        property="purityZh"/>
+        <result column="form_zh"          property="formZh"/>
+        <result column="storage_zh"       property="storageZh"/>
+        <result column="specification_zh" property="specificationZh"/>
+        <!-- 西班牙语字段 -->
+        <result column="name_es"          property="nameEs"/>
+        <result column="subtitle_es"      property="subtitleEs"/>
+        <result column="short_desc_es"    property="shortDescEs"/>
+        <result column="description_es"   property="descriptionEs"/>
+        <result column="purity_es"        property="purityEs"/>
+        <result column="form_es"          property="formEs"/>
+        <result column="storage_es"       property="storageEs"/>
+        <result column="specification_es" property="specificationEs"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="ProductRM">
+        SELECT p.*, c.name AS category_name
+        FROM products p
+        LEFT JOIN categories c ON p.category_id = c.id
+        <where>
+            <if test="categoryId != null">AND p.category_id = #{categoryId}</if>
+            <if test="keyword != null and keyword != ''">
+                AND (p.name LIKE CONCAT('%',#{keyword},'%') OR p.short_desc LIKE CONCAT('%',#{keyword},'%'))
+            </if>
+            <if test="featured != null">AND p.is_featured = #{featured}</if>
+        </where>
+        ORDER BY p.sort_order ASC, p.id ASC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM products p
+        <where>
+            <if test="categoryId != null">AND p.category_id = #{categoryId}</if>
+            <if test="keyword != null and keyword != ''">
+                AND (p.name LIKE CONCAT('%',#{keyword},'%') OR p.short_desc LIKE CONCAT('%',#{keyword},'%'))
+            </if>
+            <if test="featured != null">AND p.is_featured = #{featured}</if>
+        </where>
+    </select>
+
+    <select id="findBySlug" resultMap="ProductRM">
+        SELECT p.*, c.name AS category_name
+        FROM products p
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.slug = #{slug}
+        LIMIT 1
+    </select>
+
+    <select id="findById" resultMap="ProductRM">
+        SELECT p.*, c.name AS category_name
+        FROM products p
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE p.id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO products (category_id, name, slug, subtitle, description, short_desc,
+                              purity, form_type, storage, specification, price, stock_status,
+                              is_featured, image, sort_order,
+                              name_zh, subtitle_zh, short_desc_zh, description_zh,
+                              purity_zh, form_zh, storage_zh, specification_zh,
+                              name_es, subtitle_es, short_desc_es, description_es,
+                              purity_es, form_es, storage_es, specification_es)
+        VALUES (#{categoryId}, #{name}, #{slug}, #{subtitle}, #{description}, #{shortDesc},
+                #{purity}, #{form}, #{storage}, #{specification}, #{price}, #{stockStatus},
+                #{isFeatured}, #{coverImage}, #{sortOrder},
+                #{nameZh}, #{subtitleZh}, #{shortDescZh}, #{descriptionZh},
+                #{purityZh}, #{formZh}, #{storageZh}, #{specificationZh},
+                #{nameEs}, #{subtitleEs}, #{shortDescEs}, #{descriptionEs},
+                #{purityEs}, #{formEs}, #{storageEs}, #{specificationEs})
+    </insert>
+
+    <update id="update">
+        UPDATE products
+        <set>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="slug != null">slug = #{slug},</if>
+            <if test="subtitle != null">subtitle = #{subtitle},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="shortDesc != null">short_desc = #{shortDesc},</if>
+            <if test="purity != null">purity = #{purity},</if>
+            <if test="form != null">form_type = #{form},</if>
+            <if test="storage != null">storage = #{storage},</if>
+            <if test="specification != null">specification = #{specification},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="stockStatus != null">stock_status = #{stockStatus},</if>
+            <if test="isFeatured != null">is_featured = #{isFeatured},</if>
+            <if test="coverImage != null">image = #{coverImage},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            name_zh = #{nameZh},
+            subtitle_zh = #{subtitleZh},
+            short_desc_zh = #{shortDescZh},
+            description_zh = #{descriptionZh},
+            purity_zh = #{purityZh},
+            form_zh = #{formZh},
+            storage_zh = #{storageZh},
+            specification_zh = #{specificationZh},
+            name_es = #{nameEs},
+            subtitle_es = #{subtitleEs},
+            short_desc_es = #{shortDescEs},
+            description_es = #{descriptionEs},
+            purity_es = #{purityEs},
+            form_es = #{formEs},
+            storage_es = #{storageEs},
+            specification_es = #{specificationEs},
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">DELETE FROM products WHERE id = #{id}</delete>
+
+</mapper>

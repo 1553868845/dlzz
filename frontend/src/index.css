@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply font-sans text-gray-800 bg-white; }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-brand-500 text-white px-6 py-3 rounded-lg font-semibold
+           hover:bg-brand-600 active:bg-brand-700 transition-colors duration-200
+           focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2;
+  }
+  .btn-outline {
+    @apply border-2 border-brand-500 text-brand-500 px-6 py-3 rounded-lg font-semibold
+           hover:bg-brand-500 hover:text-white transition-colors duration-200;
+  }
+  .card {
+    @apply bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300;
+  }
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-brand-500 mb-4;
+  }
+  .badge-instock  { @apply inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded-full; }
+  .badge-outstock { @apply inline-block bg-red-100   text-red-700   text-xs font-semibold px-2 py-0.5 rounded-full; }
+
+  /* ── 后台管理组件类 ── */
+  .btn-admin-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 bg-brand-500 hover:bg-brand-600
+           text-white text-sm font-medium rounded-xl transition-all duration-150
+           shadow-sm shadow-brand-500/20 hover:shadow-brand-500/30 hover:scale-[1.02]
+           active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+  .btn-admin-secondary {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200
+           text-gray-700 text-sm font-medium rounded-xl transition-colors duration-150;
+  }
+  .input-admin {
+    @apply px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm
+           focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent
+           placeholder-gray-400 transition-all duration-150;
+  }
+  .th-admin {
+    @apply text-left text-xs font-semibold text-gray-500 uppercase tracking-wide px-4 py-3;
+  }
+  .td-admin {
+    @apply px-4 py-3.5 text-sm text-gray-700;
+  }
+  .form-label {
+    @apply block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide;
+  }
+}
+
+@layer utilities {
+  /* Toast 进度条收缩动画 */
+  @keyframes shrink-bar {
+    from { width: 100%; }
+    to   { width: 0%; }
+  }
+  .animate-shrink-bar {
+    animation: shrink-bar 3.5s linear forwards;
+  }
+
+  /* 弹窗缩放进入 */
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .animate-scale-in {
+    animation: scale-in 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}

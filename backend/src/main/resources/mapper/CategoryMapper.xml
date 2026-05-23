@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qingli.mall.mapper.CategoryMapper">
+
+    <select id="findAll" resultType="com.qingli.mall.entity.Category">
+        SELECT id, name, slug, description, sort_order, name_zh, name_es, created_at, updated_at
+        FROM categories
+        ORDER BY sort_order ASC, id ASC
+    </select>
+
+    <select id="findById" resultType="com.qingli.mall.entity.Category">
+        SELECT id, name, slug, description, sort_order, name_zh, name_es, created_at, updated_at
+        FROM categories WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO categories (name, slug, description, sort_order, name_zh, name_es)
+        VALUES (#{name}, #{slug}, #{description}, #{sortOrder}, #{nameZh}, #{nameEs})
+    </insert>
+
+    <update id="update">
+        UPDATE categories SET name=#{name}, slug=#{slug}, description=#{description}, sort_order=#{sortOrder}, name_zh=#{nameZh}, name_es=#{nameEs}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">DELETE FROM categories WHERE id = #{id}</delete>
+
+    <select id="findPaged" resultType="com.qingli.mall.entity.Category">
+        SELECT id, name, slug, description, sort_order, name_zh, name_es, created_at, updated_at
+        FROM categories
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (name LIKE CONCAT('%', #{keyword}, '%') OR slug LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY sort_order ASC, id ASC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countPaged" resultType="long">
+        SELECT COUNT(*) FROM categories
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (name LIKE CONCAT('%', #{keyword}, '%') OR slug LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+    </select>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM categories
+    </select>
+
+</mapper>
