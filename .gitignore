@@ -19,5 +19,23 @@ frontend/dist/
 .DS_Store
 Thumbs.db
 
+# Env & secrets
+.env
+.env.example
+application.yml
+
+# Docker
+docker-compose.yml
+*.Dockerfile
+
+# Deploy scripts
+deploy.sh
+deploy_new_server.py
+
+# Infra config
+nginx/
+mysql/
+db/
+
 # Runtime logs
 *.log
